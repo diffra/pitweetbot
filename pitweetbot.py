@@ -50,9 +50,10 @@ def post_load( delay, counter ):
                 netupps = str( ( ( psutil.net_io_counters( pernic=True )['eth0'].bytes_sent-netup ) / delay ) / 1024 )
 		netdown = psutil.net_io_counters( pernic=True )['eth0'].bytes_recv
                 netup = psutil.net_io_counters( pernic=True )['eth0'].bytes_sent
+		temp = float(check_output(["/opt/vc/bin/vcgencmd", "measure_temp"])[5:9])*(9.0/5.0)+32
 		uptime = " ".join(str( datetime.timedelta( seconds=time.time()-psutil.boot_time() ) ).split()[:2])[:-1]
 		#print emojize(":computer: %s% :signal_strength: %s% :floppy_disk: %s% :minidisk: %s% :arrow_down: %sK :arrow_up: %sK" % (cpuInUse, memInUse, sdcInUse, hddInUse, netdownps, netupps) )
-		status_text=emojize(":computer: " + cpuInUse  + "%  :signal_strength: " + memInUse  + "%  :floppy_disk: " + sdcInUse  + "% (/) " +hddInUse  + "% (/media)  :arrow_down: " + netdownps  + "K  :arrow_up: " + netupps  + "K  :clock10: " + uptime)
+		status_text=emojize(":computer: " + cpuInUse  + "%  :signal_strength: " + memInUse  + "%  :floppy_disk: " + sdcInUse  + "% (/) " +hddInUse  + "% (/media)  :arrow_down: " + netdownps  + "K  :arrow_up: " + netupps  + "K  :fire: " + temp + "F  :clock10: " + uptime)
 		print status_text
 		api.PostUpdate(status_text)
 		counter -= 1
